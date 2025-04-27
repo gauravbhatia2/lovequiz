@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teddy & Cupcake - 2 Year Love Journey Quiz</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(#ffd6e7, #fffafc);
+            color: #5e5e5e;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #ff69b4;
+        }
+        .question {
+            background: #ffe4f1;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 15px;
+            font-size: 18px;
+        }
+        .options {
+            margin-top: 15px;
+        }
+        .option {
+            background-color: #ffb6c1;
+            border: 2px solid #ff69b4;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .right {
+            background-color: #90ee90;
+        }
+        .wrong {
+            background-color: #f8d7da;
+        }
+        .result {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 30px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        .heart {
+            color: #ff69b4;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #ff69b4;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+        .summary {
+            margin-top: 40px;
+            font-size: 22px;
+            text-align: center;
+            color: #ff69b4;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>❤️ Teddy & Cupcake ❤️</h1>
+        <h2>Our 2-Year Love Journey Quiz</h2>
+
+        <div id="quiz-container">
+            <div id="question-number" class="question"></div>
+            <div id="question" class="question"></div>
+            <div id="options" class="options"></div>
+        </div>
+
+        <div id="result" class="result"></div>
+
+        <div class="buttons">
+            <button id="prevBtn" class="button" onclick="previousQuestion()" disabled>Previous</button>
+            <button id="nextBtn" class="button" onclick="nextQuestion()">Next</button>
+            <button id="completeBtn" class="button" onclick="completeQuiz()" style="display: none;">Complete</button>
+        </div>
+
+        <div id="summary" class="summary"></div>
+
+        <div class="footer">
+            Made with <span class="heart">♥</span> by Teddy for Cupcake
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { 
+                question: "What date did I first propose to you?", 
+                correct: "29th April 2023", 
+                wrong: "14th Feb 2023", 
+                rightMessage: "Yay! You remembered our magical day! 💖", 
+                wrongMessage: "Oops! But it's okay, you're still my cupcake. 🍰" 
+            },
+            { 
+                question: "What nickname do I lovingly call you?", 
+                correct: "Cupcake", 
+                wrong: "Baby", 
+                rightMessage: "Aww, you know me too well! 🧁", 
+                wrongMessage: "Hmm, not quite! But you're still my sweet cupcake. 🍰" 
+            },
+            { 
+                question: "When did you officially say YES to me?", 
+                correct: "29th April 2023", 
+                wrong: "29th March 2023", 
+                rightMessage: "Our special day! 💍", 
+                wrongMessage: "Not quite the date, but I know you remember the moment. 😘"
+            },
+            { 
+                question: "Which city did we meet in for the first time?", 
+                correct: "Mumbai", 
+                wrong: "Hyderabad", 
+                rightMessage: "You remember! Mumbai was magical! 🌆", 
+                wrongMessage: "Nope, it was Mumbai, but I know you’ll get it next time! 😉"
+            },
+            { 
+                question: "In which month and year did I tell my family about you?", 
+                correct: "Nov 2024", 
+                wrong: "Jan 2025", 
+                rightMessage: "That was an important day! 🏡", 
+                wrongMessage: "Almost! But it was in November! 😘"
+            },
+            { 
+                question: "What’s the sweetest thing I always say to you?", 
+                correct: "Mera Baccha", 
+                wrong: "Meri Gadhi", 
+                rightMessage: "Mera Baccha! You're my world! 🥰", 
+                wrongMessage: "Haha! That's funny, but it's Mera Baccha. 😄"
+            },
+            { 
+                question: "Which city did we visit together in October 2024?", 
+                correct: "Hyderabad", 
+                wrong: "Mumbai", 
+                rightMessage: "Yes! Hyderabad was amazing! ✈️", 
+                wrongMessage: "Nope, it was Hyderabad! We have to visit again soon! 😘"
+            },
+            { 
+                question: "What’s my favorite thing about you?", 
+                correct: "A*s", 
+                wrong: "B**bies", 
+                rightMessage: "Haha, you know what I love! 😘", 
+                wrongMessage: "Oops, you're still adorable though! 😂"
+            },
+            { 
+                question: "How do I usually cheer you up when you're sad?", 
+                correct: "Will order your favourite food.", 
+                wrong: "You don't do anything.", 
+                rightMessage: "I know exactly what makes you happy! 🍕", 
+                wrongMessage: "Ouch! I always do my best to cheer you up! 😢"
+            },
+            { 
+                question: "What little name do you call me?", 
+                correct: "Bubu", 
+                wrong: "Mujhe yaad nhi. Lol!", 
+                rightMessage: "You know it! Bubu forever! 🧸", 
+                wrongMessage: "Haha, you do remember, right? 😅"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionNumberElement = document.getElementById('question-number');
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const resultElement = document.getElementById('result');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const completeBtn = document.getElementById('completeBtn');
+
+            if (currentQuestionIndex < quizData.length) {
+                const question = quizData[currentQuestionIndex];
+                questionNumberElement.textContent = `Question ${currentQuestionIndex + 1}`;
+                questionElement.textContent = question.question;
+
+                optionsElement.innerHTML = `
+                    <div class="option" onclick="checkAnswer('${question.correct}')">${question.correct}</div>
+                    <div class="option" onclick="checkAnswer('${question.wrong}')">${question.wrong}</div>
+                `;
+                resultElement.textContent = "";
+
+                // Enable/disable buttons
+                prevBtn.disabled = currentQuestionIndex === 0;
+                nextBtn.style.display = (currentQuestionIndex === quizData.length - 1) ? 'none' : 'inline-block';
+                completeBtn.style.display = (currentQuestionIndex === quizData.length - 1) ? 'inline-block' : 'none';
+            }
+        }
+
+        function checkAnswer(answer) {
+            const question = quizData[currentQuestionIndex];
+            const resultElement = document.getElementById('result');
+            
+            if (answer === question.correct) {
+                score++;
+                resultElement.textContent = question.rightMessage;
+                resultElement.classList.add("right");
+            } else {
+                resultElement.textContent = question.wrongMessage;
+                resultElement.classList.add("wrong");
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                displaySummary();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function completeQuiz() {
+            displaySummary();
+        }
+
+        function displaySummary() {
+            const summaryElement = document.getElementById('summary');
+            
+            // Personalized message based on score
+            let message = '';
+            if (score === quizData.length) {
+                message = "You aced the quiz, my Cupcake! 🎉💖 You're my soulmate, my love, my everything! 🧸";
+            } else if (score >= quizData.length / 2) {
+                message = "Not bad at all! You're still my Cupcake, and I love you more each day! 💖";
+            } else {
+                message = "Well, you might have missed a few, but you are my forever Cupcake! 🍰 I'll love you no matter what! 💖";
+            }
+
+            summaryElement.innerHTML = `
+                🎉🎉🎉<br>
+                <h2>${message}</h2>
+                <p>Your score: ${score} / ${quizData.length}</p>
+                <p>Happy 2nd Anniversary Baby! 💖 I love you the most! 🧸</p>
+                <p>Here's to many more beautiful moments with you, Cupcake! 🍰</p>
+            `;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
